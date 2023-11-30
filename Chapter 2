@@ -1,4 +1,9 @@
+"""
+Date: 11/30/2023
+"""
+
 # 选择子句 -- The Select Statement
+# 2.1 The SELECT Clause
 SELECT *columns* -- 选择数据集里面的某些列
       column_1, 
       column_2, 
@@ -7,7 +12,7 @@ FROM *Datasets/Tables* -- 从指定的数据集里面选
 WHERE *filter* -- 筛选条件
 ORDER BY *columns* -- 根据某一列来升序排列
 
-# 练习作业1
+# 练习作业2.1
 -- Return all the products
 --       name
 --       unit_price
@@ -17,3 +22,68 @@ SELECT
     unit_price, 
     unit_price * 1.1 AS 'new price'
 FROM products
+
+# 2.2 The WHERE Clause
+SELECT *
+FROM customers
+-- WHERE points > 3000
+-- comparison operators: >, >=, <, <=, =, !=, <> 后面两个都是‘不等于’
+-- WHERE state != 'VA' -- 要给字符串加单双引号，没有大小写区别 
+WHERE birth_date > '1990-01-01' -- 即使日期不是string, 也得加单双引号
+
+# 练习2.2
+-- Get the orders placed this year (2019)
+SELECT * 
+FROM orders
+WHERE order_date >= '2019-01-01' -- 这不严谨，因为没有将‘2020年之前’作为条件之一
+
+# 2.3 The AND, OR and NOT operator
+-- AND 同时满足条件 OR 满足其中一个条件即可 
+-- 逻辑运算符优先顺序：NOT > AND > OR 
+-- AND OR 的运用实例：
+SELECT * 
+FROM customers
+WHERE birth_date >= '1990-01-01' OR 
+	  (points > 1000 AND state = 'VA') -- 条件1 1990-01-01后出生；条件2 积分>1000且生活在VA。
+					   -- 此处加不加括号都一样，因为AND优先级高于OR，加了易于理解而已。
+
+-- NOT的运用实例
+SELECT * 
+FROM customers
+WHERE NOT (birth_date >= '1990-01-01' OR points > 1000) -- 数学意义上的逐个否定/反义词
+-- WHERE birth_date < '1990-01-01' AND points <=1000 -- 上面那条与这个等效
+
+# 练习2.3
+-- From the order_items table, get the items
+-- 	for order #6
+-- 	where the total price is greater than 30
+SELECT *
+FROM order_items
+WHERE order_id = 6 AND (quantity * unit_price) > 30
+
+# 2.4 The IN operator
+-- 当你想将多个同类型的条件放在同一个WHERE后面
+-- 不能简单的将布尔表达式和字符串放在一起
+-- 比如 WHERE state = 'VA' OR 'GL' OR 'LA', 这是不对的
+-- 这时候就可以用IN了
+SELECT *
+FROM customers
+WHERE state IN ('VA', 'FL', 'GA') -- 此处在IN前面加NOT就得到了相反的结果
+
+# 练习2.4
+-- Return products with
+-- 	quantity in stock equal to 49, 38, 72
+SELECT * 
+FROM products 
+WHERE quantity_in_stock IN (49, 38, 72)
+
+# 2.5 The BETWEEN operator
+SELECT *
+FROM customers
+WHERE points BETWEEN 1000 AND 3000; -- 范围值已经包含临界值，也就是>= AND <=
+# 练习2.5
+-- Return customers born
+-- between 1/1/1990 and 1/1/2000
+SElECT *
+FROM customers
+WHERE birth_date BETWEEN '1990-01-01' AND '2000-01-01'
