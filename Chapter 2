@@ -81,6 +81,7 @@ WHERE quantity_in_stock IN (49, 38, 72)
 SELECT *
 FROM customers
 WHERE points BETWEEN 1000 AND 3000; -- 范围值已经包含临界值，也就是>= AND <=
+
 # 练习2.5
 -- Return customers born
 -- between 1/1/1990 and 1/1/2000
