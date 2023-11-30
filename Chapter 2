@@ -88,3 +88,26 @@ WHERE points BETWEEN 1000 AND 3000; -- 范围值已经包含临界值，也就�
 SElECT *
 FROM customers
 WHERE birth_date BETWEEN '1990-01-01' AND '2000-01-01'
+
+# 2.6 The LIKE operator
+-- 当我们想选择姓以B开头的顾客：
+SELECT *
+FROM customers
+-- WHERE last_name LIKE 'BRUSH%' -- %表示任意字段数，B大小写均可
+-- WHERE last_name LIKE '%b%' -- 这里表示b前后可有任意字符，也就是姓有b就行
+-- WHERE last_name LIKE '%y' -- 姓以y结尾
+WHERE last_name LIKE 'b____y' -- 下划线'_'表示一个字符长度
+-- % any number of characters
+-- _ single character
+
+# 练习 2.6
+-- Get the customers whose 
+-- 	address contain TRAIL or AVENUE
+-- 	phone number end with 9
+-- 	其实这俩练习应该分开的，我没注意
+
+SELECT * 
+FROM customers
+WHERE address LIKE '%TRAIL%' OR address LIKE '%AVENUE%' 
+								-- 一定要注意布尔表达式和字符串不能直接连接！
+	  AND phone LIKE '%9'
