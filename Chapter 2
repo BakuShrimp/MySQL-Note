@@ -1,0 +1,8 @@
+# 选择子句 -- The Select Statement
+SELECT *columns* -- 选择数据集里面的某些列
+      column_1, 
+      column_2, 
+      column_3 (with math calculation) AS *rename*
+FROM *Datasets/Tables* -- 从指定的数据集里面选
+WHERE *filter* -- 筛选条件
+ORDER BY *columns* -- 根据某一列来升序排列
