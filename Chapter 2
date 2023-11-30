@@ -6,3 +6,14 @@ SELECT *columns* -- 选择数据集里面的某些列
 FROM *Datasets/Tables* -- 从指定的数据集里面选
 WHERE *filter* -- 筛选条件
 ORDER BY *columns* -- 根据某一列来升序排列
+
+# 练习作业1
+-- Return all the products
+--       name
+--       unit_price
+--       new price(unit_price * 1.1)
+SELECT 
+	name, 
+    unit_price, 
+    unit_price * 1.1 AS 'new price'
+FROM products
