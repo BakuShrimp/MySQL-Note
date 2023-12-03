@@ -30,8 +30,28 @@ JOIN products p
 -- 假设要将(1)sql_store的order_items表
 -- 和(2)sql_inventory的products表连接
 USE sql_store; 
-
 SELECT *
 FROM order_items oi
+-- 因为在课程开始选择的就是sql_store的数据库
+-- 所以第一行order_item不用指定数据库
+-- 只需要给不在当前数据库的表加前缀
 JOIN sql_inventory.products p
 	ON oi.product_id = p.product_id
+
+# 3.3 Self Joins
+-- 将一个表自己连接自己称之为自连接
+-- 和内连接操作大抵相同
+-- 只是需要注意给表添加不同别称即可
+USE sql_hr; 
+
+SELECT 
+	e.employee_id, 
+    	e.first_name AS employee, 
+--    	e.last_name, 
+--    	e.job_title, 
+--    	e.reports_to, 
+    	m.first_name AS manager
+FROM employees e
+JOIN employees m
+	ON e.reports_to = m.employee_id
+
