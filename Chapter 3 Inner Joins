@@ -102,3 +102,63 @@ JOIN payment_methods pm
 	ON p.payment_method = pm.payment_method_id
 JOIN clients c
 	ON p.client_id = c.client_id
+
+# 3.5 Compound Join Conditions 复合连接条件
+-- 当一个表有两个主键时，比如order_items的主键是产品id和订单id
+-- 这时候就要用到复合连接
+-- 基本就是在之前学过的连接加一个AND条件。
+-- 这里记得按照视频改order_item_notes的数据
+USE sql_store;
+
+SELECT *
+FROM order_items oi
+JOIN order_item_notes oin
+	ON oi.order_id = oin.order_id
+    AND oi.product_id = oin.product_id
+
+# 3.6 Implicit Join Syntax 隐式连接语法
+SELECT *
+FROM orders o
+JOIN customers c
+	ON o.customer_id = c.customer_id
+-- 上述是之前学过的连接语法，也是比较常见的 
+-- 下面是隐式连接的一个例子，和上面等效
+-- 但是不建议用，因为如果忘记WHERE子句，就会得到交叉连接的结果
+-- （似乎又称笛卡尔积/笛卡尔爆炸？
+SELECT *
+FROM orders o, customers c
+WHERE    o.customer_id = c.customer_id
+
+# 3.7 Outer Joins 外连接
+-- 先回顾一个内连接的简单例子：
+SELECT 
+	c.customer_id, 
+    c.first_name, 
+    o.order_id
+FROM customers c
+JOIN orders o
+	ON c.customer_id = o.customer_id -- 代表着在orders下了单的customers的顾客
+    -- 不会显示没下订单的顾客
+    -- 简称：交集
+ORDER BY c.customer_id 
+
+-- 外连接有两种类型: Left Join & Right Join
+-- Left Join代表所有左（上FROM）表的所有记录都会被返回，无论是否符合条件
+-- 在此例中会返回所有顾客
+-- Right Join 同理，在此例中会返回所有订单
+-- LEFT/RIGHT (OUTER) JOIN，这里OUTER可有可无，和INNER一样
+
+/*
+总结：只写JOIN，内连接；加LEFT/RIGHT, 外连接；OUTER/INNER可忽略
+*/
+
+# 练习3.7
+-- 这个练习是外连接products和order_items表
+SELECT 
+	p.product_id, 
+    p.name, 
+    oi.quantity
+FROM products p
+LEFT JOIN order_items oi
+	ON p.product_id = oi.product_id
+ORDER BY product_id
