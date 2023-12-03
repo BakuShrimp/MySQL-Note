@@ -55,3 +55,50 @@ FROM employees e
 JOIN employees m
 	ON e.reports_to = m.employee_id
 
+# 3.4 Joining Multiple Tables
+-- 为了制造一个简洁的包含订单id，用户姓名以及订单状态的表格
+-- 需要连接来自customers的姓名，orders的order_id, order_statues的状态
+-- 自己先写一遍！
+USE sql_store; 
+
+SELECT order_id, order_date, c.first_name, c.last_name, os.name
+FROM orders o
+JOIN customers c
+	ON c.customer_id = o.customer_id
+JOIN order_statuses os
+	ON o.status = os.order_status_id
+ORDER BY name, order_id
+
+-- 老师写的：
+SELECT 
+	order_id, 
+    order_date, 
+    c.first_name, 
+    c.last_name, 
+    os.name AS status
+FROM orders o
+JOIN customers c
+	ON c.customer_id = o.customer_id
+JOIN order_statuses os
+	ON o.status = os.order_status_id
+ORDER BY name, order_id
+
+# 练习3.4
+-- 从sql_invoicing连接必要的表格
+-- 制造一张含有顾客姓名，付款方式，日期的表格
+-- 因为题目没有明确需求，自己发挥选择什么列来制造表格
+
+USE sql_invoicing; 
+
+SELECT 
+ 	p.payment_id, 
+--	p.invoice_id
+    p.date, 
+    c.name AS client_name, 
+    p.amount, 
+    pm.name AS payment_method
+FROM payments p
+JOIN payment_methods pm
+	ON p.payment_method = pm.payment_method_id
+JOIN clients c
+	ON p.client_id = c.client_id
