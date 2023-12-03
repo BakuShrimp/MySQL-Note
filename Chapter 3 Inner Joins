@@ -2,3 +2,36 @@
 前面的章节都是只选择了一张表格
 这一章模拟的是应用多张表格
 */
+# 3.1 Inner Join 内连接
+-- 这一课教的是连接两个表格的方法
+-- 这里的应用是选取orders和customers的customer_id并连接
+-- 以此得到同一个顾客下的不同订单
+SELECT order_id, o.customer_id, first_name, last_name
+-- 这里要指定customer_id来自于哪个表，因为两个表都有此列
+-- 不指明的话会报错‘ambiguous’
+FROM sql_store.orders AS o -- AS可以省略
+INNER JOIN customers AS c -- AS可以省略, INNER也可以省略
+		ON o.customer_id = c.customer_id
+
+# 练习3.1
+-- 	对照order items表，和products表连接
+-- 每笔订单都返回订单id，产品id和名字，连同order items表的数量和单价
+SELECT  order_id, oi.product_id, name, quantity, oi.unit_price -- order_id仅在oi表出现，无需指定
+FROM order_items AS oi
+INNER JOIN products AS pd
+	ON oi.product_id = pd.product_id
+-- 简洁版：
+SELECT order_id, oi.product_id, name, quantity, oi.unit_price
+FROM order_items oi
+JOIN products p
+  ON oi.product_id = p.product_id
+
+# 3.2 Joining Across Databases 跨数据库连接
+-- 假设要将(1)sql_store的order_items表
+-- 和(2)sql_inventory的products表连接
+USE sql_store; 
+
+SELECT *
+FROM order_items oi
+JOIN sql_inventory.products p
+	ON oi.product_id = p.product_id
