@@ -162,3 +162,172 @@ FROM products p
 LEFT JOIN order_items oi
 	ON p.product_id = oi.product_id
 ORDER BY product_id
+
+# 3.8 Outer Join Between Multiple Tables
+-- 跨多个表外连接，基本原理两个表外连接是一样的
+-- 只是需要多加一行外连接语句而已
+-- 尽量避免使用RIGHT JOIN以简化代码
+USE sql_store; 
+SELECT 
+	c.customer_id, 
+    c.first_name, 
+    o.order_id, 
+    s.name AS shipper_name
+FROM customers c
+LEFT JOIN orders o
+	ON c.customer_id = o.customer_id 
+LEFT JOIN shippers s
+	ON o.shipper_id = s.shipper_id
+ORDER BY c.customer_id 
+
+# 练习3.8
+-- 写一段查询，生成：
+-- 订单日期，订单id，顾客名，运输商名字，订单状态
+SELECT 
+	o.order_date, 
+    o.order_id, 
+    c.first_name AS customer, 
+    sp.name AS shipper, 
+    os.name AS status
+FROM customers c
+JOIN orders o
+	ON c.customer_id = o.customer_id
+LEFT JOIN shippers sp
+
+# 3.9 Self Outer Joins
+USE sql_hr; 
+
+SELECT 
+	e.employee_id, 
+	e.first_name, 
+    e.last_name, 
+    e.reports_to AS manager, 
+    m.last_name
+FROM employees e
+LEFT JOIN employees m
+	ON e.reports_to = m.employee_id -- 只会返回符合该条件的人，因此不会显示CEO
+    -- 用LEFT JOIN 可以解决
+	ON o.shipper_id = sp.shipper_id
+LEFT JOIN order_statuses os
+	ON o.status = os.order_status_id
+ORDER BY status, order_id
+
+# 3.10 The USING Clause
+-- 仅在不同表中具有同名列的时候可以使用USING
+USE sql_store; 
+SELECT 
+	o.order_id, 
+    c.first_name, 
+    sh.name AS shipper
+FROM orders o
+JOIN customers c
+	-- ON o.customer_id = c.customer_id
+    USING (customer_id) -- 两行完全等效
+LEFT JOIN shippers sh
+	USING (shipper_id)
+
+-- 当具备两个主键的时候以及两个表共享两个同名列的时候，怎么用USING？
+/*
+USE sql_store; 
+SELECT *
+FROM order_items oi
+JOIN order_item_notes oin
+	USING (order_id, product_id) 
+*/
+
+# 练习3.10
+-- 使用sql_invoicing数据库
+-- 从payments写一段查询，生成：
+-- date, client, amount, payment_method. 
+USE sql_invoicing; 
+SELECT 
+	p.date, 
+    c.name AS client, 
+    p.amount, 
+    pm.name AS payment_method
+FROM payments p
+JOIN clients c
+	USING (client_id)
+JOIN payment_methods pm
+	ON p.payment_method = pm.payment_method_id
+
+# 3.11 Natural Joins
+-- 不建议使用，了解有就好。
+-- 这种方式数据库会自己看着办，选择相同的列连接
+-- 因为无法控制结果所以不建议使用
+USE sql_store; 
+SELECT 
+	o.order_id, 
+    c.first_name
+FROM orders o
+NATURAL JOIN customers c
+
+# 3.12 Cross Joins
+SELECT 
+	c.first_name AS customer, 
+    p.name AS product
+FROM customers c -- , products p
+CROSS JOIN products p -- 这种是显性表达语句
+ORDER BY c.first_name
+-- 这里的结果就是笛卡尔乘积！
+-- 隐形表达语句就是在FROM后面列出来要交叉连接的表格
+
+# 练习3.12
+-- Do a cross join between shippers and products
+-- 	using the implicit syntax
+-- and then using the explicit syntax
+SELECT 
+	sh.name AS shipper, 
+	p.name AS product
+FROM shippers sh-- , products p
+CROSS JOIN products p
+ORDER BY sh.name
+
+# 3.13 Unions
+-- 简单粗暴的合并多段查询记录
+-- 只需要加在两端查询语段中间！
+-- 这时候语段就不需要加分号了。
+-- UNION去重，UNION ALL不去重
+-- 需要注意，SELECT这里的返回列数量一定要保持一样
+SELECT -- 这一列决定了返回结果的列名
+	order_id, 
+    order_date, 
+    'Active' AS status
+FROM orders o
+WHERE order_date >= '2019-01-01' AND order_date < '2020-01-01'
+UNION
+SELECT 
+	order_id, 
+    order_date, 
+    'Archive' AS status
+FROM orders o
+WHERE order_date < '2019-01-01'
+
+# 练习3.13
+-- 写一段查询返回顾客id，顾客名，顾客积分，积分类型
+-- 积分类型：<2000 BRONZE，2000-3000 SILVER，>3000 GOLD
+-- 按照名字排序
+SELECT 
+	customer_id, 
+    first_name, 
+    points, 
+    'Bronze' AS type
+FROM customers
+WHERE points < 2000
+UNION
+SELECT 
+	customer_id, 
+    first_name, 
+    points, 
+    'Silver'
+FROM customers
+WHERE points >= 2000 AND points < 3000 -- 简化：WHERE points BETWEEN 2000 AND 3000
+UNION
+SELECT 
+	customer_id, 
+    first_name, 
+    points, 
+    'Gold'
+FROM customers
+WHERE points >= 3000
+ORDER BY first_name
