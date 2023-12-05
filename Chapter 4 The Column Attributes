@@ -1,0 +1,146 @@
+# 4.1 The Column Attributes
+/*
+Click on the screwdriver icon behind any table, here I'll use the customers table as an example
+The number after Datatype means how many characters you can type in. 
+INT: integer, VARCHAR: variable, character. (If you use CHAR to save data, it takes up much more space, so we better use VARCHAR)
+On the first row, PK = primary key. (Move ur cursor on it to see what it stands for)
+Click on 'AI (Auto Incremental)' on the primary key value, MYSQL automatically increments, or in other words, gives an ID to each primary key value. 
+*/
+
+# 4.2 Inserting a Row
+INSERT INTO customers -- 在这里后面添加一个括号选定赋值的内容，在下面的VALUES可以删去不用的赋值
+-- 比如 INSERT INTO customers(first_name, last_name, birth_date, address, city, state)
+-- 就可以在下面删去那几个DEFAULT和NULL了，因为表格自己会赋值给他们。
+VALUES (DEFAULT, 
+		'John', 
+        'Smith', 
+        '1999-01-01', 
+        NULL, 
+        '9 Churchyard Row', 
+        'LD', 
+        'US', 
+        DEFAULT)
+-- 已经成功加入一行John Smith了！
+
+# 4.3 Inserting Multiple Rows
+INSERT INTO shippers(name)
+VALUES ('Shipper1'), 
+	   ('Shipper2'), 
+	   ('Shipper3')
+
+# 练习4.3
+-- Insert 3 rows into products table
+INSERT INTO products(name, quantity_in_stock, unit_price)
+VALUES ('Potatoes', 388, 0.8), 
+	   ('Tomatoes', 299, 0.7), 
+       ('Cucumbers', 100, 0.6)
+
+# 4.4 Insert Hierarchical Rows 插入分层行
+-- 本章的精髓在于使用LAST_INSERT_ID()获取上一个插入语句自动生成的ID，以方便下一段插入语句调用
+-- 插入多个表格本质就是写多一段插入语句
+INSERT INTO orders (customer_id, order_date, status)
+VALUES (1, '2019-01-02', 1); 
+
+INSERT INTO order_items
+VALUES 
+	  (LAST_INSERT_ID(), 1, 1, 2.95), 
+	  (LAST_INSERT_ID(), 2, 1, 3.95)
+
+# 4.5 Creating a Copy of a Table
+CREATE TABLE order_archived 
+SELECT * FROM orders
+-- 用这个方法SQL不会自动生成主键以及自动递增列
+-- 删除表格的方法: 右键点击表格，选择truncate table
+
+-- 指定符合条件的行插入新表格的方法：
+INSERT INTO orders_archived
+SELECT *
+FROM orders 
+WHERE order_date < '2019-01-01'
+
+# 练习4.5
+-- 选择sql_invoicing库，查看invoices
+-- 复制一个类似invoices的新表，命名为invoices_archived, 但是要将client_id换成client名
+-- 且仅选择支付过的（payment_date != NULL）
+USE sql_invoicing; 
+CREATE TABLE invoices_archived
+SELECT 
+	invoice_id, 
+    number, 
+    c.name AS client_name, 
+    invoice_total, 
+    invoice_date, 
+    due_date, 
+    payment_date
+FROM invoices i
+JOIN clients c USING (client_id)
+WHERE payment_date > '2018-01-01' 
+-- 这里应该用 WHERE payment_date IS NOT NULL
+
+# 4.6 Updating a Single Row
+-- 假如发票表里某一位顾客支付了，我们需要更新表格的支付记录/日期
+UPDATE invoices
+SET payment_total = invoice_total * 0.5, -- 可以用数学表达式
+	payment_date = due_date -- 也可以用列属性的默认值
+WHERE invoice_id = 3
+
+# 4.7 Updating Mutiple Rows
+-- 当你想要修改多条记录时，只需要让WHERE的条件变得更加通用
+USE sql_invoicing; 
+UPDATE invoices
+SET payment_total = invoice_total * 0.5, -- 可以用数学表达式
+	payment_date = due_date -- 也可以用列属性的默认值
+WHERE client_id IN (3, 4) -- 修改多个记录时可以用IN()
+/*
+有的SQL工作台是在安全模式下运行的，默认只允许更新一条记录
+虽然我的MySQL默认可以修改多条记录，但是如果发生了上述情况，解决方案如下：
+在右上角有个齿轮设置，点进齿轮，点进SQL Editor并滑到最下方，关闭Safe Update并重启INSTANCE
+*/
+
+# 练习4.7
+-- Write a SQL statement to 
+--	give any customers born before 1990
+-- 	50 extra points
+USE sql_store; 
+UPDATE customers
+SET points = points + 50
+WHERE birth_date < '1990-01-01'
+
+# 4.8 Using Subqueries in Updates
+-- 这是一个很方便的功能，在一段查询里插入一段子查询
+USE sql_invoicing; 
+UPDATE invoices
+SET payment_total = invoice_total * 0.5, 
+	payment_date = due_date 
+WHERE client_id IN 
+-- 但是在实际查询前，最好先选中子查询的结果，确认一下是否自己想要的结果
+				(SELECT client_id
+                FROM clients
+                WHERE state IN ('CA', 'NY'))
+
+# 练习4.8
+-- 选择sql_store库，查看订单表
+-- 从没有注释（Comments）的顾客中，选择下过订单的且积分超过3000的顾客
+-- 为他们添加注释，改为金牌顾客
+USE sql_store; 
+
+UPDATE orders
+SET comments = 'Golden Customer'
+WHERE customer_id IN (
+					  SELECT customer_id
+                      FROM customers
+                      WHERE points >= 3000)
+
+# 4.9 Deleting Rows
+USE sql_invoicing; 
+DELETE FROM invoices 
+WHERE client_id = 1
+-- 也可以使用子查询
+WHERE client_id = (
+				   SELECT client_id
+				   FROM clients
+                   WHERE name = 'Myworks')
+
+# 4.10 Restoring the Databases
+-- 在开始下一章之前，先把本章改动过的所有数据集改回初始状态
+-- 打开课程文件：create-databases.sql，打开并执行，结束。
