@@ -1,5 +1,5 @@
 # 4.1 The Column Attributes
-/*
+/* 
 Click on the screwdriver icon behind any table, here I'll use the customers table as an example
 The number after Datatype means how many characters you can type in. 
 INT: integer, VARCHAR: variable, character. (If you use CHAR to save data, it takes up much more space, so we better use VARCHAR)
