@@ -96,3 +96,40 @@ JOIN payment_methods pm
 GROUP BY date, payment_method
 ORDER BY date
 	
+# 5.3 The HAVING Clause
+-- 优先级：WHERE > GROUP BY > HAVING
+-- 所以如果想用分组结果来进行筛选，不能直接使用WHERE
+-- 而应该使用HAVING, 注意HAVING的变量也得在SELECT里面有。
+SELECT
+	client_id, 
+    SUM(invoice_total) AS total_sales, 
+    COUNT(*) AS number_of_invoices
+FROM invoices
+GROUP BY client_id
+HAVING total_sales > 500 AND number_of_invoices > 5
+
+# 练习5.3
+-- Get the customers
+--	   located in Virginia(VA)
+-- 	   who have spent > $100
+-- 老师的示范视频是修改过数据的，结果不同不必焦虑，找准思路就行。
+USE sql_store; 
+-- 默认：在没有GROUP BY的前提下使用聚合函数是不可以的(ONLY_FULL_GROUP_BY模式下)
+-- 所以这里只用SUM()不用GROUP BY的话会报错1140
+-- https://stackoverflow.com/questions/1244169/mysql-1140-mixing-of-group-columns
+SELECT
+	c.customer_id, 
+    c.first_name, 
+    c.last_name, 
+    SUM(oi.quantity * oi.unit_price) AS total_sales
+FROM customers c
+JOIN orders o
+	USING (customer_id)
+JOIN order_items oi
+	USING (order_id)
+WHERE state = 'VA'
+GROUP BY
+	c.customer_id, 
+    c.first_name, 
+    c.last_name
+HAVING total_sales >= 100
