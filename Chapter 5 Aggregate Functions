@@ -55,6 +55,7 @@ ORDER by total_sales DESC
 -- 按照多个列来分类的例子：
 # 5.2 GROUP BY Clause
 -- 一个具体案例：根据顾客id来分类销售总额，限定为上半年期间的销售，且按照销售额从大到小来排序。
+-- 注意！：GROUP BY的子列一定要在SELECT里面列出来。
 SELECT 
     c.city, 
     c.state, 
