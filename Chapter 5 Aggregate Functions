@@ -19,6 +19,7 @@ SELECT
     SUM(invoice_total - payment_total) AS what_we_expect
 FROM invoices
 WHERE invoice_date < '2019-07-01' AND invoice_date >= '2019-01-01'
+-- WHERE invoice_date BETWEEN!!!! 用BETWEEN更简便！
 UNION
 SELECT 
 	'Second half of 2019' AS date_range, 
