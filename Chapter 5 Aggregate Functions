@@ -1,1 +1,26 @@
 # 汇总数据
+# 练习5.1
+-- 写一个查询得到一个表格，其中包含：
+-- 2019前半年销售记录；2019后半年销售记录；总计。
+-- 指标包含：总销售，销售支付记录，我们仍需得到的支付记录(what_we_expect)
+
+USE sql_invoicing; 
+SELECT 
+	SUM(invoice_total) AS total_sales, -- don't use ';'! 
+    SUM(payment_total) AS payment_total, 
+    SUM(invoice_total - payment_total) AS what_we_expect
+FROM invoices
+WHERE invoice_date < '2019-07-01' AND invoice_date >= '2019-01-01'
+UNION
+SELECT 
+	SUM(invoice_total) AS total_sales, 
+    SUM(payment_total) AS payment_total, 
+    SUM(invoice_total - payment_total) AS what_we_expect
+FROM invoices
+WHERE invoice_date >= '2019-07-01' AND invoice_date < '2020-01-01'
+UNION
+SELECT 
+	SUM(invoice_total) AS total_sales, 
+    SUM(payment_total) AS payment_total, 
+    SUM(invoice_total - payment_total) AS what_we_expect
+FROM invoices
