@@ -82,6 +82,7 @@ WHERE i.payment_date IS NOT NULL
 ORDER BY date
 
 -- 按照老师给的答案改的：
+-- 这里必须用SUM，之后才可以用payment_method排列，因为结果要求的是按照不同计算方法计算得到的‘总额’。
 USE sql_invoicing; 
 SELECT
 	  p.date, 
