@@ -1,11 +1,19 @@
 # 汇总数据
+
 # 练习5.1
 -- 写一个查询得到一个表格，其中包含：
 -- 2019前半年销售记录；2019后半年销售记录；总计。
 -- 指标包含：总销售，销售支付记录，我们仍需得到的支付记录(what_we_expect)
 
+/*
+这个练习卡了我最久的居然是如何添加第一列命名列
+但是其实直接 SELECT '字符串' AS 列名
+就可以解决！！！！！！！
+*/
+
 USE sql_invoicing; 
 SELECT 
+	'First half of 2019' AS date_range, 
 	SUM(invoice_total) AS total_sales, -- don't use ';'! 
     SUM(payment_total) AS payment_total, 
     SUM(invoice_total - payment_total) AS what_we_expect
@@ -13,6 +21,7 @@ FROM invoices
 WHERE invoice_date < '2019-07-01' AND invoice_date >= '2019-01-01'
 UNION
 SELECT 
+	'Second half of 2019' AS date_range, 
 	SUM(invoice_total) AS total_sales, 
     SUM(payment_total) AS payment_total, 
     SUM(invoice_total - payment_total) AS what_we_expect
@@ -20,6 +29,7 @@ FROM invoices
 WHERE invoice_date >= '2019-07-01' AND invoice_date < '2020-01-01'
 UNION
 SELECT 
+	'Total' AS date_range, 
 	SUM(invoice_total) AS total_sales, 
     SUM(payment_total) AS payment_total, 
     SUM(invoice_total - payment_total) AS what_we_expect
