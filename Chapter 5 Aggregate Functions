@@ -39,3 +39,58 @@ USE sql_invoicing;
 	FROM invoices
 	WHERE invoice_date
 			BETWEEN '2019-01-01' AND '2019-12-31'
+
+# 5.2 GROUP BY Clause
+-- 一个具体案例：根据顾客id来分类销售总额，限定为上半年期间的销售，且按照销售额从大到小来排序。
+-- 注意子句顺序。
+SELECT 
+	client_id, 
+	SUM(invoice_total) AS total_sales
+FROM invoices
+WHERE invoice_date
+		BETWEEN '2019-01-01' AND '2019-06-30'
+GROUP BY (client_id)
+ORDER by total_sales DESC
+
+-- 按照多个列来分类的例子：
+# 5.2 GROUP BY Clause
+-- 一个具体案例：根据顾客id来分类销售总额，限定为上半年期间的销售，且按照销售额从大到小来排序。
+SELECT 
+    c.city, 
+    c.state, 
+	SUM(i.invoice_total) AS total_sales
+FROM invoices i
+JOIN clients c
+	 USING (client_id)
+GROUP BY state, city
+
+# 练习5.2
+-- 写一段查询得到一个结果：
+-- 包含日期（2019上半年），支付方法，总支付额。
+-- 我写的v1：并没有解决按照日期GROUP BY的问题，只是长得像而已
+USE sql_invoicing; 
+SELECT 
+	  i.payment_date AS date, 
+	  pm.name AS payment_method, 
+      p.amount AS total_payments
+FROM invoices i
+JOIN payments p
+	 USING (invoice_id)
+JOIN payment_methods pm
+	 ON p.payment_method = pm.payment_method_id
+WHERE i.payment_date IS NOT NULL
+ORDER BY date
+
+-- 按照老师给的答案改的：
+USE sql_invoicing; 
+SELECT
+	  p.date, 
+	  pm.name AS payment_method, 
+      SUM(p.amount) AS total_payments
+FROM payments p
+JOIN payment_methods pm
+	 ON p.payment_method = pm.payment_method_id
+-- WHERE i.payment_date IS NOT NULL
+GROUP BY date, payment_method
+ORDER BY date
+	
