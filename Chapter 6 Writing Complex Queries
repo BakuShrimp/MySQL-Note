@@ -112,3 +112,25 @@ WHERE customer_id IN (
     WHERE oi.product_id = 3
     )
 ORDER BY customer_id
+
+# 6.5 The ALL Keyword
+-- Select invoices larger than all invoices of 
+-- client 3
+-- 方法1：用MAX写子查询
+USE sql_invoicing; 
+SELECT *
+FROM invoices
+WHERE invoice_total > (
+	SELECT MAX(invoice_total)
+    FROM invoices
+    WHERE client_id = 3);
+-- 方法2：运用ALL写
+-- ALL() 代表括号里的查询返回的所有值
+USE sql_invoicing; 
+SELECT *
+FROM invoices
+WHERE invoice_total > ALL (
+	SELECT invoice_total
+    FROM invoices
+    WHERE client_id = 3)
+-- 两种方法没有优劣之分，看个人喜好
