@@ -154,3 +154,22 @@ WHERE client_id IN ( -- IN可以换为 = ANY
 	HAVING COUNT(*) >= 2
 )
 
+# 6.7 Correlated Subqueries
+-- 开始之前做个练习：
+-- Select employees whose salary is
+-- larger than the average in their office
+USE sql_hr; 
+SELECT *
+FROM employees e
+WHERE salary > (
+	SELECT 
+		AVG(salary)
+	FROM employees 
+	WHERE office_id = e.office_id
+)
+/*
+相关子查询的意思就是在子查询里调用了主查询里出现的别名
+从而多次历遍结果，得到多次结果
+因为有主查询和子查询有直接相关性所以称为相关子查询
+以区分，可以看上一节的子查询得到的结果，仅得到一次性的一个列表，且并无直接调用主查询出现的别名。
+*/
