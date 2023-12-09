@@ -53,3 +53,32 @@ WHERE client_id NOT IN (
 	SELECT DISTINCT client_id
     FROM invoices
     )
+
+# 6.4 Subqueries VS Join
+/*
+这是上一节课代码的另一种使用JOIN的表达方式
+在子查询和JOIN的选择中，要考虑1.表现（比如执行时间长短）2.可读性
+在这个例子中，子查询更为直观，因为它更符合解决预设问题的逻辑
+*/
+SELECT *
+FROM clients
+LEFT JOIN invoices USING (client_id)
+WHERE invoice_id IS NULL
+
+# 练习6.4
+-- Find customers who have ordered lettuce (id = 3)
+-- 		Select customer_id, first_name, last_name
+USE sql_store; 
+SELECT 
+	customer_id, 
+    first_name, 
+    last_name
+FROM customers
+WHERE customer_id IN (
+	SELECT customer_id
+	FROM orders 
+	WHERE order_id IN (
+		SELECT DISTINCT order_id
+		FROM order_items
+		WHERE product_id = 3))
+ORDER BY customer_id
