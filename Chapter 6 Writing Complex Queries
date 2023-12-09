@@ -1,1 +1,14 @@
 # 6.1
+-- 用课程文件将数据库还原成默认状态。
+
+# 6.2 Subqueries
+-- 先用一段简单的查询热热身：
+-- Find products that are more
+-- expensive than lettuce (id = 3)
+USE sql_store; 
+SELECT * 
+FROM products
+WHERE unit_price > (
+	SELECT unit_price 
+    FROM products 
+    WHERE product_id = 3)
