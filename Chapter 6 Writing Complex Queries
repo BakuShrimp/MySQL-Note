@@ -134,3 +134,23 @@ WHERE invoice_total > ALL (
     FROM invoices
     WHERE client_id = 3)
 -- 两种方法没有优劣之分，看个人喜好
+
+# 6.6 The ANY Keyword
+-- 上一节学了ALL，类似的还有ANY和SOME
+-- 可以理解ALL = AND， ANY = OR
+-- 练习：Select clients with at least two invoices
+USE sql_invoicing; 
+SELECT *
+FROM clients
+WHERE client_id IN ( -- IN可以换为 = ANY
+	SELECT 
+		DISTINCT client_id
+--    COUNT(*) AS invoice_number
+-- 这里之所以在SELECT列中没有GROUP BY的变量
+-- 是因为COUNT(*)可以视作内置聚合函数
+-- 只有非聚合函数字段需要和GROUP BY保持一致！
+	FROM invoices
+	GROUP BY client_id
+	HAVING COUNT(*) >= 2
+)
+
