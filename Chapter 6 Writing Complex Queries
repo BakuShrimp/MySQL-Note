@@ -68,7 +68,7 @@ WHERE invoice_id IS NULL
 # 练习6.4
 -- Find customers who have ordered lettuce (id = 3)
 -- 		Select customer_id, first_name, last_name
--- 解法1：写一个使用IN的子查询
+-- 解法1：只嵌套子查询
 USE sql_store; 
 SELECT 
 	customer_id, 
@@ -84,7 +84,7 @@ WHERE customer_id IN (
 		WHERE product_id = 3))
 ORDER BY customer_id
 
---  解法2：使用JOIN
+--  解法2：只使用JOIN
 USE sql_store; 
 SELECT 
 	DISTINCT customer_id, 
@@ -94,5 +94,21 @@ FROM customers c
 JOIN orders o USING (customer_id)
 JOIN order_items oi
 	ON o.order_id = oi.order_id
+-- 这里也可以直接USING(order_id)
 WHERE oi.product_id = 3
+ORDER BY customer_id
+
+-- 解法3：交替使用子查询和JOIN
+USE sql_store; 
+SELECT 
+	customer_id, 
+    first_name, 
+    last_name
+FROM customers
+WHERE customer_id IN (
+	SELECT customer_id
+	FROM orders 
+    JOIN order_items oi USING (order_id)
+    WHERE oi.product_id = 3
+    )
 ORDER BY customer_id
