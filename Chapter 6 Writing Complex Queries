@@ -12,3 +12,44 @@ WHERE unit_price > (
 	SELECT unit_price 
     FROM products 
     WHERE product_id = 3)
+
+# 练习6.2
+-- In sql_hr databases: 
+--  	find employees whose earn more than average
+-- 我想插入一条新纪录显示平均工资的但是失败了。日后再试。
+USE sql_hr;
+
+SELECT 
+	employee_id, 
+    first_name, 
+    last_name, 
+    salary
+FROM employees
+WHERE salary >= (
+	SELECT AVG(salary)
+    FROM employees
+    )
+
+# 6.3 The IN Operator
+-- Find the products that have never been ordered
+/*
+与上一节不同，上一节返回的是单独一个值用于比较
+这一节返回了一个列表用于比较
+如果想要，也可以返回一整个表。
+*/
+USE sql_store; 
+SELECT *
+FROM products
+WHERE product_id NOT IN (
+	SELECT DISTINCT product_id
+    FROM order_items)
+
+# 练习6.3
+-- Find clients without invoices
+USE sql_invoicing; 
+SELECT *
+FROM clients 
+WHERE client_id NOT IN (
+	SELECT DISTINCT client_id
+    FROM invoices
+    )
