@@ -173,3 +173,16 @@ WHERE salary > (
 因为有主查询和子查询有直接相关性所以称为相关子查询
 以区分，可以看上一节的子查询得到的结果，仅得到一次性的一个列表，且并无直接调用主查询出现的别名。
 */
+
+# 练习6.7
+-- Get invoices that are larger than the
+-- client's average invoice amount
+-- 弹幕：如果不明白可以试试SQLZOO Select with SELECT的9 10题
+USE sql_invoicing; 
+SELECT *
+FROM invoices i
+WHERE invoice_total > (
+	SELECT AVG(invoice_total)
+    FROM invoices
+    WHERE client_id = i.client_id
+)
