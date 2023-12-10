@@ -177,7 +177,7 @@ WHERE salary > (
 # 练习6.7
 -- Get invoices that are larger than the
 -- client's average invoice amount
--- 弹幕：如果不明白可以试试SQLZOO Select with SELECT的9 10题
+-- 很难理解的话，去刷SQLZOO的Select Within SELECT的题目和quiz就好了
 USE sql_invoicing; 
 SELECT *
 FROM invoices i
