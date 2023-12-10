@@ -264,3 +264,22 @@ SELECT
     FROM invoices) AS average,
     (SELECT total_sales - average) AS difference
 FROM clients c
+
+# 6.10 Subqueries in the FROM Clause
+-- 借用一下上一节课练习的代码
+-- 如果要在FROM用子查询，一定要起一个别名(alias)给子查询
+-- 否则会报错1248
+-- 不过这么写很冗杂！
+SELECT *
+FROM (
+	SELECT 
+		client_id, 
+		name, 
+		(SELECT SUM(invoice_total) FROM invoices
+		WHERE client_id = c.client_id) AS total_sales, 
+		(SELECT AVG(invoice_total)
+		FROM invoices) AS average,
+		(SELECT total_sales - average) AS difference
+	FROM clients c
+) AS sales_summery
+WHERE total_sales IS NOT NULL
