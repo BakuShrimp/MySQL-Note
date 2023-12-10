@@ -186,3 +186,46 @@ WHERE invoice_total > (
     FROM invoices
     WHERE client_id = i.client_id
 )
+
+# 6.8 The EXIST Operator
+-- Select the clients with (at least) an invoice
+-- 1: Use IN operator
+USE sql_invoicing; 
+SELECT *
+FROM clients c
+WHERE client_id IN (
+	SELECT DISTINCT client_id
+    FROM invoices
+); 
+
+-- 2: Use EXISTS operator
+SELECT *
+FROM clients c
+WHERE EXISTS (
+	SELECT client_id
+    FROM invoices i
+    WHERE c.client_id = i.client_id
+)
+
+/*
+二者的区别在当面对更大的数据集时候
+EXISTS更加快速，因为它不会从子查询返回一个很大的数据集
+它的原理可以这样理解：
+1.在大查询里找到一条记录A
+2.拿着这个记录A的client_id去子查询（invoices表）里找记录
+3.找到了就返回这条记录B的client_id给大查询
+   大查询再凭着这个client_id在clients表里面找记录
+4.没找到就pass下一条记录
+5.重复1-4
+*/
+
+# 练习6.8
+-- Find the products that have never been ordered
+USE sql_store; 
+SELECT *
+FROM products p
+WHERE NOT EXISTS (
+	SELECT DISTINCT product_id
+    FROM order_items oi
+    WHERE p.product_id = oi.product_id
+)
