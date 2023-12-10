@@ -242,3 +242,25 @@ SELECT
     invoice_total - (SELECT invoice_average) AS difference -- 这里也可以直接复制，但是会更冗杂
 FROM invoices
 
+# 练习6.9
+SELECT 
+	client_id, 
+    c.name, 
+    SUM(invoice_total) AS total_sales, 
+    (SELECT AVG(invoice_total)
+    FROM invoices) AS average,
+    SUM(invoice_total) - (SELECT average) AS difference
+FROM invoices i
+RIGHT JOIN clients c USING (client_id)
+GROUP BY client_id
+
+-- 老师写的：
+SELECT 
+	client_id, 
+    name, 
+    (SELECT SUM(invoice_total) FROM invoices
+    WHERE client_id = c.client_id) AS total_sales, 
+    (SELECT AVG(invoice_total)
+    FROM invoices) AS average,
+    (SELECT total_sales - average) AS difference
+FROM clients c
