@@ -229,3 +229,16 @@ WHERE NOT EXISTS (
     FROM order_items oi
     WHERE p.product_id = oi.product_id
 )
+
+# 6.9 Subqueries in the SELECT Clause
+-- 这一章教你如何在SELECT里面使用子查询，同时子查询也可以在WHERE里面使用（之前用过的技巧
+-- 以后还可以在FROM里面使用
+USE sql_invoicing; 
+SELECT
+	invoice_id, 
+    invoice_total, 
+    (SELECT AVG(invoice_total)
+    FROM invoices) AS invoice_average, 
+    invoice_total - (SELECT invoice_average) AS difference -- 这里也可以直接复制，但是会更冗杂
+FROM invoices
+
