@@ -61,3 +61,17 @@ SELECT
     DATEDIFF('2019-01-01 09:00', '2019-05-01 17:00'),  -- 只返回天数的间隔
     TIME_TO_SEC('09:00') - TIME_TO_SEC('09:02')
 
+# 7.6 The IFNULL and COALESCE Functions
+SELECT
+	order_id, 
+    IFNULL(shipper_id, 'Not assigned') AS shipper, 
+    COALESCE(shipper_id, comments, 'Not assigned') AS shipper
+    -- COALESCE() 会检查前两个变量是否都是空值，如果都是则会返回指定内容，如果第一/二个不是会返回第一/二个内容。
+FROM orders
+
+# 练习7.6
+SELECT 
+	CONCAT(first_name, ' ', last_name) AS customer, 
+    IFNULL(phone, 'Unknown') AS phone    
+FROM customers
+
