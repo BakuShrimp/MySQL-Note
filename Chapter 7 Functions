@@ -75,3 +75,22 @@ SELECT
     IFNULL(phone, 'Unknown') AS phone    
 FROM customers
 
+# 7.7 The IF Fucntion
+SELECT
+	order_id,
+	order_date, 
+    IF(YEAR(order_date) = 2019, 'Active', 'Archived') AS new_comments
+FROM orders
+
+# 练习7.7
+SELECT 
+	p.product_id, 
+    name, 
+    COUNT(oi.product_id) AS orders, -- 这里可以写COUNT(*)
+    IF(COUNT(oi.product_id) = 1, 'Once', 'Many times') AS frequency
+FROM products p
+JOIN order_items oi
+USING (product_id)
+GROUP BY product_id, name -- 我这里一开始没写name跑出来的结果是一样的
+ORDER BY product_id
+
