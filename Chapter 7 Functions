@@ -53,3 +53,11 @@ SELECT
 	DATE_FORMAT(NOW(), '%H:%i %p')
 -- Google 'mysql date format string' for more, especially the '%x'/'%X's. 
 
+# 7.5 Calculating Dates and Times
+SELECT 
+	DATE_ADD(NOW(), INTERVAL 1 DAY), -- 给现在的时间加上一天，返回明天的同一时间点
+    -- 同理替换DAY with MONTH/YEAR, 修改1 with -1
+    DATE_SUB(NOW(), INTERVAL 1 DAY), 
+    DATEDIFF('2019-01-01 09:00', '2019-05-01 17:00'),  -- 只返回天数的间隔
+    TIME_TO_SEC('09:00') - TIME_TO_SEC('09:02')
+
