@@ -78,3 +78,9 @@ UPDATE invoices_with_balance
 SET payment_total = invoice_total
 WHERE invoice_id = 3
 
+# 8.5 Other Benifits of Views
+/*
+1. Simplify queries
+2. Reduce the impact of changes: you can regard VIEWS as backups of original data sets. 
+3. Restrict access to original data
+*/
