@@ -1,0 +1,29 @@
+# 8.1 Creating Views
+-- 当你要重复利用一段查询的结果时，创建一个视图是很方便的工具。
+USE sql_invoicing; 
+CREAtE VIEW sales_by_client AS
+SELECT 
+	c.client_id,
+	c.name, 
+    SUM(invoice_total) AS total_sales
+FROM clients c
+JOIN invoices USING (client_id)
+GROUP BY client_id, name
+/*
+现在，刚才创造的临时表便被存为了实体表格
+并被保存在了所使用的库的Views里面
+记得刷新库，才能看到新创建的Views
+*/
+
+# 练习8.1
+-- Create a view to see the balance of each client. 
+-- name it clients_balance: client_id, name, balance. 
+CREATE VIEW clients_balance AS
+SELECT 
+    client_id, 
+    c.name, 
+    SUM(payment_total) - SUM(invoice_total) AS balance
+FROM invoices i
+RIGHT JOIN clients c USING (client_id)
+GROUP BY client_id, name
+
