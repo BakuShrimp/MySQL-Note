@@ -46,3 +46,10 @@ SELECT *
 FROM orders
 WHERE YEAR(order_date) = 2019
 -- WHERE EXTRACT(YEAR FROM order_date) = 2019 -- 同理
+
+# 7.4 Formatting Dates and Times
+SELECT 
+	DATE_FORMAT(NOW(), '%M %D %Y'),  -- change capital to lower case for different outcome
+	DATE_FORMAT(NOW(), '%H:%i %p')
+-- Google 'mysql date format string' for more, especially the '%x'/'%X's. 
+
