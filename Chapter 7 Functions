@@ -8,3 +8,22 @@ SELECT
     RAND() -- Random取随机数
 -- Google mysql numeric functions for more
 
+# 7.2 String Functions
+SELECT 
+	LENGTH('sky'), -- calculate its length
+    UPPER('sky'), -- make it capital letter
+    LOWER('SKY'),  -- make it lower case
+    LTRIM('    sky'),  -- left trim the spaces
+    RTRIM('sky    '),  -- Right trim the spaces
+    -- 在python里是lstrip/rstrip
+    TRIM('  sky   '), 
+    LEFT('Kindergarten', 4),  -- similarly, we have RIGHT('', x)
+    SUBSTRING('Kindergarten', 3, 5),  -- 从字符串第3位开始选取5个字符
+    LOCATE('N', 'Kindergarten'), -- 不区分大小写
+    REPLACE('Kindergarten', 'garten', 'garden'), -- Replace 'garten' in 'Kindergarten' with 'garden'
+    CONCAT('first', 'last') -- Concatenation, 连接两个变量
+-- CONCAT() example: 
+USE sql_store; 
+SELECT CONCAT(first_name, ' ', last_name) AS full_name
+FROM customers
+-- Google 'Mysql string functions' for more
