@@ -27,3 +27,22 @@ USE sql_store;
 SELECT CONCAT(first_name, ' ', last_name) AS full_name
 FROM customers
 -- Google 'Mysql string functions' for more
+
+-- 7.3 Date functions
+SELECT 
+	NOW(), -- Get current time (FULL) on ur pc. 
+    CURDATE(), -- Get current date on ur pc. 
+    CURTIME(), -- Get current time on ur pc. 
+    YEAR(NOW()), -- Year can be replaced with 'Month', 'Day', 'Hour' etc. 
+    DAYNAME(NOW()), 
+    MONTHNAME(NOW()), -- Return strings. 
+    EXTRACT(DAY FROM NOW()) -- 当你想要将数据转移到别的DBMS时会很有用。
+
+# 练习7.3
+-- 修改之前写过的提取2019年的订单的代码使其更为准确
+-- 使用刚学过的Date functions.
+USE sql_store; 
+SELECT *
+FROM orders
+WHERE YEAR(order_date) = 2019
+-- WHERE EXTRACT(YEAR FROM order_date) = 2019 -- 同理
