@@ -94,3 +94,30 @@ USING (product_id)
 GROUP BY product_id, name -- 我这里一开始没写name跑出来的结果是一样的
 ORDER BY product_id
 
+# 7.8 The CASE Operator
+-- IF()只能测试俩条件，如果你要测试更多条件的话：
+-- 用CASE可以解决。当然用IF嵌套IF也可以。
+SELECT 
+	order_id, 
+    CASE
+		WHEN YEAR(order_date) = 2019
+			THEN 'Active'
+		WHEN YEAR(order_date) = 2018
+			THEN 'Last year'
+		WHEN YEAR(order_date) < 2018
+			THEN 'Archived'
+		ELSE 'Future'
+	END AS category
+FROM orders
+
+# 练习7.8
+SELECT 
+	CONCAT(first_name, ' ', last_name) AS customer, 
+    points, 
+    CASE
+		WHEN points > 3000 THEN 'Gold'
+        WHEN points BETWEEN 2000 AND 3000 THEN 'Silver'
+        ELSE 'Bronze'
+	END AS category
+FROM customers
+ORDER BY points DESC
