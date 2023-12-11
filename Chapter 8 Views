@@ -27,3 +27,17 @@ FROM invoices i
 RIGHT JOIN clients c USING (client_id)
 GROUP BY client_id, name
 
+# 8.2 Altering or Dropping Views
+-- 1. Drop one view first, then create a new one. 
+-- Using: DROP VIEW 'view_name'
+-- 2. Alter a view using CREATE OR REPLACE VIEW + ...
+-- Hot key for saving views: ctrl + s
+CREATE OR REPLACE VIEW sales_by_client AS
+SELECT 
+	c.client_id, 
+    c.name, 
+    SUM(invoice_total - payment_total) AS total_sale
+FROM clients c
+JOIN invoices i USING (client_id)
+GROUP BY client_id, name
+
