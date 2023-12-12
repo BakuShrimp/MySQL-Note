@@ -36,3 +36,14 @@ DELIMITER ;
 -- 这样就不用担心分隔符的问题了，专心写中间语句就行
 -- 例子：名为get_payments的那个Procedure
 
+-- 9.4 Dropping Stored Procedures
+-- Method 1: 
+DROP PROCEDURE IF EXISTS get_clients
+-- 一般写SP的时候最好先加上这句，方便再现代码
+-- 加上上面那句，这一章的代码才是完整的基本架构
+DELIMITER $$
+CREATE PROCEDURE get_clients()
+BEGIN
+	SELECT * FROM clients; 
+END $$
+DELIMITER ;
