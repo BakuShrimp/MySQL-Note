@@ -76,3 +76,27 @@ BEGIN
     WHERE i.client_id = client_id; 
 END $$
 DELIMITER ;
+
+# 9.6 Parameters with Default
+DROP PROCEDURE IF EXISTS get_clients_by_state
+DELIMITER $$
+CREATE PROCEDURE get_clients_by_state
+(
+	state CHAR(2) 
+)
+BEGIN
+	IF state IS NULL THEN
+		SELECT * FROM clients;
+	ELSE
+		SELECT * FROM clients c
+		WHERE c.state = state; 
+	END IF; 
+	SELECT * FROM clients c
+    WHERE c.state = state; 
+    /*
+    也可以删掉IF那一段，直接将WHERE的条件改为
+    WHERE c.state = IFNULL(state, c.state)
+    */
+END $$
+DELIMITER ;
+
