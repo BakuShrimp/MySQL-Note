@@ -1,0 +1,38 @@
+# 9.1 Stored Procedures
+-- Used to avoid messy coding and easier to update codes. 
+-- Can also achieve faster execution and data security. 
+
+# 9.2 Creating a stored procedure
+USE sql_invoicing; 
+DELIMITER $$
+CREATE PROCEDURE get_clients()
+BEGIN
+	SELECT * FROM clients; 
+END $$
+
+DELIMITER ;
+
+-- 执行 Stored procedure 用 CALL procedure_name()
+
+# 练习9.2
+-- DELIMITER 一定要先写，写在CREATE前面
+-- Create a store procedure called
+--  get_invoices_with_balance
+--  to return all the invoices with a balance > 0
+DELIMITER $$
+CREATE PROCEDURE get_invoices_with_balance()
+BEGIN
+	SELECT 
+		*, 
+        invoice_total - payment_total AS balance
+	FROM invoices -- 也可以用第八章建立的视图invoices_with_balance
+	WHERE invoice_total - payment_total > 0; 
+END $$
+DELIMITER ;
+
+# 9.3 Creating Procedure Using MySQL Workbench
+-- 一个更为方便的办法就是在左边导航面板
+-- 右键点击Stored Procedures创建一个新的
+-- 这样就不用担心分隔符的问题了，专心写中间语句就行
+-- 例子：名为get_payments的那个Procedure
+
