@@ -47,3 +47,32 @@ BEGIN
 	SELECT * FROM clients; 
 END $$
 DELIMITER ;
+
+# 9.5 Parameters
+DROP PROCEDURE IF EXISTS get_clients_by_state
+DELIMITER $$
+CREATE PROCEDURE get_clients_by_state
+(
+	state CHAR(2) -- CHAR(2)代表有两个字符的字符串，比如CA，也就是本表里洲的缩写
+)
+BEGIN
+	SELECT * FROM clients c
+    WHERE c.state = state; -- 也可以修改参数里面的state为其他名字来写这一句
+END $$
+DELIMITER ;
+
+# 练习9.5
+-- Write a stored procedure to return invoices 
+-- with a given client
+-- get_invoices_with_client
+DROP PROCEDURE IF EXISTS get_invoices_with_client
+DELIMITER $$
+CREATE PROCEDURE get_invoices_with_client
+(
+client_id INT
+)
+BEGIN
+	SELECT * FROM invoices i
+    WHERE i.client_id = client_id; 
+END $$
+DELIMITER ;
