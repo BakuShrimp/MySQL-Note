@@ -140,3 +140,25 @@ BEGIN
         WHERE i.invoice_id = invoice_id; 
 END
 
+# 9.8 Output Parameters
+-- 在SELECT行下使用OUT + 变量名字
+-- 可以将查询结果输出为新的变量
+-- 但是还是建议尽量避免使用这个
+CREATE DEFINER=`root`@`localhost` PROCEDURE `make_payemnt`(
+	invoice_id INT, 
+    payment_amount DECIMAL(9, 2), -- 小数(位数，小数点后的位数)
+    payment_date DATE
+)
+BEGIN
+	IF payment_amount <= 0 THEN
+    SIGNAL SQLSTATE '22003' 
+		SET MESSAGE_TEXT = 'Invalird payment amount'; 
+    -- Google 'sqlstate errors' from ibm.com for more. 
+	END IF; 
+	UPDATE invoices i
+    SET 
+		i.payment_total = payment_amount, 
+        i.payment_date = payment_date
+        WHERE i.invoice_id = invoice_id; 
+END
+
