@@ -119,3 +119,23 @@ BEGIN
 END $$
 DELIMITER ;
 
+# 9.7 Parameter Validation
+-- 在更新数据库时，为了不意外存储错误数据
+-- 可以使用参数验证
+CREATE DEFINER=`root`@`localhost` PROCEDURE `make_payemnt`(
+	invoice_id INT, 
+    payment_amount DECIMAL(9, 2), -- 小数(位数，小数点后的位数)
+    payment_date DATE
+)
+BEGIN
+	IF payment_amount <= 0 THEN
+    SIGNAL SQLSTATE '22003'; 
+    -- Google 'sqlstate errors' from ibm.com for more. 
+
+	UPDATE invoices i
+    SET 
+		i.payment_total = payment_amount, 
+        i.payment_date = payment_date
+        WHERE i.invoice_id = invoice_id; 
+END
+
