@@ -162,3 +162,10 @@ BEGIN
         WHERE i.invoice_id = invoice_id; 
 END
 
+# 9.9 Variables
+-- 定义变量的标准语法：SET @variable_name = X
+-- Such variables are also called USER or SESSION Variables. 
+-- The other kind of variable is called Local Variable. 
+-- Use DECALRE variable_name DATATYPE() DEFAULT x to define local variables. 
+-- 查看 get_risk_factor 这个过程以查看应用。
+
