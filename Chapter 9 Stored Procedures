@@ -184,3 +184,11 @@ FROM clients
 -- 删除函数的方法：
 -- DROP FUNCTION IF EXISTS function_name; 
 
+# 9.11 Other Conventions
+/*
+这一节介绍了不同人/公司对于语法或者命名的一些规则。
+本节课用的命名都是使用下划线划分，但是有人喜欢驼峰式：GetRiskFactorForClient
+又或者在函数前面加fc，过程前面加proc
+总结：
+自己用自己喜欢的，在公司的话就遵循公司已有/同事已有的规定/习惯。
+*/
