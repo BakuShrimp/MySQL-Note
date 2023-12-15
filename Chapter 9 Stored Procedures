@@ -169,3 +169,18 @@ END
 -- Use DECALRE variable_name DATATYPE() DEFAULT x to define local variables. 
 -- 查看 get_risk_factor 这个过程以查看应用。
 
+# 9.10 Functions
+-- 函数形式很像存储过程，但是它仅能返回单一值。
+-- 在函数里面，RETURN INTEGER以及BEGIN中间，可以插入函数属性
+-- DETERMINISTIC：单一输入返回唯一值；READS SQL DATA可以读取SQL数据；MODIFIES SQL DATA
+-- 本节课创建的函数：f() get_risk_factor_for_client
+
+-- 调用函数的方法：
+SELECT 
+	client_id, 
+	name, 
+    get_risk_factor_for_client(client_id) AS risk_factor
+FROM clients
+-- 删除函数的方法：
+-- DROP FUNCTION IF EXISTS function_name; 
+
