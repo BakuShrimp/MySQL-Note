@@ -45,3 +45,11 @@ DELETE
 FROM payments 
 WHERE payment_id = 9 -- or last_insert_id()
 */
+
+# 10.2 Viewing Triggers
+-- Method 1: 
+SHOW TRIGGERS LIKE 'payments%' 
+-- Method 2: 
+/*
+直接在SCHEMAS对应的数据库以及对应的表查看Triggerspayment_methodspayment_methods
+*/
