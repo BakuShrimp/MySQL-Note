@@ -51,8 +51,13 @@ WHERE payment_id = 9 -- or last_insert_id()
 SHOW TRIGGERS LIKE 'payments%' 
 -- Method 2: 
 /*
-直接在SCHEMAS对应的数据库以及对应的表查看Triggerspayment_methodspayment_methods
+直接在SCHEMAS对应的数据库以及对应的表查看Triggers的名字
+最好可以将Triggers保留在本地以便未来使用
 */
+
+# 10.3 Dropping Triggers
+DROP TRIGGER IF EXISTS payments_after_insert
+-- 最好的写TRIGGER的方法和之前写VIEW一样，将这一句放在一切TRIGGER代码的开头。
 
 # 10.4 Sing Triggers for Auditing
 /*
@@ -75,8 +80,6 @@ is a task (or a block of SQL code) that gets executed according to a schedule
 通过事件，我们可以定期维护数据库，例如：
 删除过期数据，将表格复制到另外一张表格等等
 */
-
-# 10.3 Dropping Triggers
-DROP TRIGGER IF EXISTS payments_after_insert
--- 最好的写TRIGGER的方法和之前写VIEW一样，将这一句放在一切TRIGGER代码的开头。
-
+SHOW VARIABLES LIKE 'Event%'; 
+-- 正则表达式：WHERE Variable_name REGEXP '^Event'
+-- 找到event_scheduler, 并确保是ON，如果不是则用SET GLOBAL event_scheduler = ON
