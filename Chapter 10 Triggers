@@ -97,4 +97,9 @@ END $$
 
 DELIMITER ;
 
-
+# 10.6 Viewing and Dropping Events
+SHOW EVENTS; -- shows all events within the selected database
+DROP EVENT IF EXISTS yearly_delete_stale_audit_rows; 
+ALTER EVENT yearly_delete_stale_audit_rows;  -- 语法和CREATE EVENT一模一样，
+-- 又或者在屁股加上DISABLE/ENABLE来快速禁用/启用，比如：
+-- ALTER EVENT yearly_delete_stale_audit_rows DISABLE
