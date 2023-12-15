@@ -1,0 +1,24 @@
+# 10.1 Triggers
+/*
+Trigger: 
+A block of SQL code that automatically gets executed BEFORE or AFTER an INSERT, UPDATE or DELETE statement. 
+*/
+DELIMITER $$
+
+CREATE TRIGGER payments_after_insert
+	AFTER INSERT ON payments
+    FOR EACH ROW-- 同理可以写BEFORE，以及UDDATE或者DELETE
+BEGIN 
+	UPDATE invoices
+    SET payment_total = payment_total + NEW.amount
+    WHERE invoice_id = NEW.invoice_id; 
+END $$
+
+DELIMITER ;
+
+/*
+有这个触发器的存在，就可以在INSERT新数据进payments的同时
+将对应的数据更新到invoices表里面，具体代码如下：
+INSERT INTO payments
+VALUES (DEFAULT, 5, 3, '2019-01-01', 10, 1)
+*/
