@@ -53,3 +53,8 @@ SHOW TRIGGERS LIKE 'payments%'
 /*
 直接在SCHEMAS对应的数据库以及对应的表查看Triggerspayment_methodspayment_methods
 */
+
+# 10.3 Dropping Triggers
+DROP TRIGGER IF EXISTS payments_after_insert
+-- 最好的写TRIGGER的方法和之前写VIEW一样，将这一句放在一切TRIGGER代码的开头。
+
