@@ -54,6 +54,21 @@ SHOW TRIGGERS LIKE 'payments%'
 直接在SCHEMAS对应的数据库以及对应的表查看Triggerspayment_methodspayment_methods
 */
 
+# 10.4 Sing Triggers for Auditing
+/*
+这一课讲的就是如何设计一个审计表，记录每一笔数据改变的发生
+在每一个触发器里面，添加几行代码来跟随每一次触发器的点火，将一条记录插入一个新表里
+这个新表就会变成所谓的审计表
+代码：
+INSERT INTO payments_audit
+VALUES(OLD.client_id, OLD.date, OLD.amount, 'DELETE', NOW()); 
+*/
+-- INSERT INTO payments
+-- VALUE(DEFAULT, 5, 3, '2019-01-01', 10, 1)
+-- DELETE FROM payments
+-- WHERE payment_id = 10
+
+
 # 10.3 Dropping Triggers
 DROP TRIGGER IF EXISTS payments_after_insert
 -- 最好的写TRIGGER的方法和之前写VIEW一样，将这一句放在一切TRIGGER代码的开头。
