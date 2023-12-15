@@ -68,6 +68,13 @@ VALUES(OLD.client_id, OLD.date, OLD.amount, 'DELETE', NOW());
 -- DELETE FROM payments
 -- WHERE payment_id = 10
 
+# 10.5 Events
+/*
+Event: 
+is a task (or a block of SQL code) that gets executed according to a schedule
+通过事件，我们可以定期维护数据库，例如：
+删除过期数据，将表格复制到另外一张表格等等
+*/
 
 # 10.3 Dropping Triggers
 DROP TRIGGER IF EXISTS payments_after_insert
