@@ -26,3 +26,18 @@ SHOW VARIABLES LIKE 'autocommit';
 这个变量表示了MySQL会自动装包我们输入的语句到Transaction里
 当语句没有执行错误的时候，MYSQL会将它们一起打包并COMMIT执行
 */
+
+# 10.3 Concurrency and Locking
+-- 当超过一个用户同时使用数据库时，便是并发
+-- 我们要尽量避免客户同时修改数据产生的冲突问题
+USE sql_store; 
+START TRANSACTION; 
+UPDATE customers
+SET points = points + 10
+WHERE customer_id = 1; 
+COMMIT; 
+/*
+把上一段语句放到两个终端模拟两个客户同时更新的场景
+当你执行一边的更新语句时候，MySQL会放一个“锁”在目前的更改上，防止另外一边更改同个数据库
+*/
+
