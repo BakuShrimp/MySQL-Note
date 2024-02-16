@@ -1,4 +1,4 @@
-# 11.1 Transactions
+# 11.1 Transactions and Isolation Levels
 /*
 Transaction: is a group of SQL statements that represent a single unit of work. 
 Transaction has the below properties which we refer to ACID: 
@@ -70,4 +70,17 @@ when there is another transaction changing the value of the reads.
 那么后更新的人就不在你所做的商业更改里面。
 这就是所谓的Phantom reads. 但是很好解决，一般再跑一次查询A就好了。
 */
+
+# 11.5 Transaction Isolation Levels
+/*
+4 types of isolation levels: 
+Read Uncommitted, Read Commmited, Repeatable Read, Serializable. 
+More increase in isolation level, more pc performance required. 
+The most useful one: Repeatable Read. Always consider this first if needed. 
+*/
+
+SHOW VARIABLES LIKE 'transaction_isolation'; 
+# default is REPEATABLE-READ
+SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE; 
+# Change 'SESSION' to 'GLOBAL' for global variables. 
 
