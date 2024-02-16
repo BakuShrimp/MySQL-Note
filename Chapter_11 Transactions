@@ -41,3 +41,33 @@ COMMIT;
 当你执行一边的更新语句时候，MySQL会放一个“锁”在目前的更改上，防止另外一边更改同个数据库
 */
 
+# 11.4 Concurrency Problems
+
+# 这一章其实说的就是多线程常见的问题。
+
+/*
+1. Lost Update
+If two transactions happen on the same data, 
+the later one(transaction B) will overwrite the former one(transaction A), 
+resulting in update A lost. 
+To avoid this, MySQL has a 'Lock', 
+forcing the two transcation run by order. 
+
+2. Dirty Reads
+当一个事务读取了不存在的数据时候
+比如当A想给某顾客增添积分但是最终Rollback
+而B尝试给这个积分做基于其的改动
+最终B会对着不存在的数据进行操作
+MySQL has 'Isolation Levels' to avoid this. 
+
+3. Non-repeating Reads
+The first read is not consistent with the second read, 
+when there is another transaction changing the value of the reads. 
+(But basically don't worry about this. Isolation transcation helps with this too. )
+
+4. Phantom Reads
+在你基于一个数值，比如积分，执行了查询A后，另外一个Transaction B更新了你查询的对象
+那么后更新的人就不在你所做的商业更改里面。
+这就是所谓的Phantom reads. 但是很好解决，一般再跑一次查询A就好了。
+*/
+
